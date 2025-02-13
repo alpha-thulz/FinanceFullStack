@@ -1,7 +1,7 @@
 FROM node:22 AS frontend
 LABEL authors="Thulani Tyaphile"
 
-COPY frontend/package.json ./
+COPY frontend/package*.json ./
 RUN npm install
 
 COPY frontend/. ./
