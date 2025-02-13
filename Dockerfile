@@ -1,10 +1,10 @@
 FROM node:22 AS frontend
 LABEL authors="Thulani Tyaphile"
 
-COPY frontend/package*.json .
+COPY frontend/package.json ./
 RUN npm install
 
-COPY frontend/. .
+COPY frontend/. ./
 RUN npx vite build
 
 FROM maven:3.9.8 AS backend
