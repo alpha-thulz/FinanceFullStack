@@ -15,7 +15,6 @@ import java.util.function.Function;
 public class TokenService {
 
     private final String SECRET_KEY;
-    private final long EXPIRATION_TIME = 1000 * 60 * 10;
 
     public TokenService() {
         String PASSWORD = "password";
@@ -23,6 +22,7 @@ public class TokenService {
     }
 
     public String generateToken(String username) {
+        long EXPIRATION_TIME = 1000 * 60 * 30;
         return Jwts.builder()
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))

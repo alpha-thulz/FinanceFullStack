@@ -12,6 +12,7 @@ import za.co.wedela.backend.dao.UserDao;
 import za.co.wedela.backend.model.User;
 import za.co.wedela.backend.model.role.Role;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -53,5 +54,32 @@ public class UserService {
             return Map.of("token", tokenService.generateToken(user.getUsername()));
         }
         throw new UsernameNotFoundException("Invalid username or password");
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public User getUser(String id) {
+        return userRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
+    }
+
+    public void deleteUser(String id) {
+        User user = getUser(id);
+        userRepo.delete(user);
+    }
+
+    public User updateUser(String id, UserDao model) {
+        User user = getUser(id);
+        user.setFirstName(model.getFirstName());
+        user.setLastName(model.getLastName());
+        user.setEmail(model.getEmail());
+        user.setPhone(model.getPhone());
+        user.setRole(model.getRole());
+        user.setUsername(model.getUsername());
+        if (model.getPassword() != null && !model.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(model.getPassword()));
+        }
+        return userRepo.save(user);
     }
 }

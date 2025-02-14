@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,10 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -49,21 +45,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(httpSecurityCorsConfigurer -> {
-                    CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(List.of("*"));
-                    configuration.setAllowedMethods(List.of("*"));
-                    configuration.setAllowedHeaders(List.of("*"));
-                    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                    source.registerCorsConfiguration("/**", configuration);
-                    httpSecurityCorsConfigurer.configurationSource(source);
-                })
+//                .cors(httpSecurityCorsConfigurer -> {
+//                    CorsConfiguration configuration = new CorsConfiguration();
+//                    configuration.setAllowedOrigins(List.of("*"));
+//                    configuration.setAllowedMethods(List.of("*"));
+//                    configuration.setAllowedHeaders(List.of("*"));
+//                    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//                    source.registerCorsConfiguration("/**", configuration);
+//                    httpSecurityCorsConfigurer.configurationSource(source);
+//                })
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/assets/**", "/api/v1/users/auth/login", "/api/v1/users/auth/register",
+                        .requestMatchers("/*", "/assets/**", "/api/v1/users/auth/login", "/api/v1/users/auth/register",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/v2/api-docs", "/configuration/ui",
                                 "/swagger-resources/**", "/configuration/security", "/swagger-ui.html",
-                                "/webjars/**").permitAll()
-                        .requestMatchers(HttpMethod.GET).permitAll()  // TODO - needs to be reworked and fixed
+                                "/webjars/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
