@@ -13,7 +13,7 @@ COPY backend/src src
 COPY --from=frontend dist/ src/main/resources/static
 RUN mvn clean package -DskipTests
 
-FROM openjdk:17
+FROM eclipse-temurin
 COPY --from=backend target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
